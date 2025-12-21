@@ -1,25 +1,44 @@
-# GroupSnap
+<div align="center"><img src="app/designs/allscreens.png"/></div>
+<h1 align="center">GroupSnap</h1>
+<h4 align="center">An Android app that solves the "missing photographer" problem by intelligently merging a group photo with a separate photo of the person who took it, making it appear as if everyone was in the same shot.</h4>
+<div align="center"><a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fgithub.com%2Fwajahatkarim3%2FEasyFlipViewPager&text=Create%20amazing%20book%20or%20card%20flipping%20animations%20for%20your%20ViewPager%20in%20Android%20with%20these%202-lines%20of%20code%20through%20EasyFlipViewPager&hashtags=android%2C%20kotlin%2C%20java%2C%20opensource%2C%20programming">
+        <img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"/>
+    </a> <a href="https://twitter.com/WajahatKarim">
+        <img src="https://img.shields.io/twitter/follow/WajahatKarim?style=social"/>
+    </a>
+</div> 
+<br/>
 
-![GroupSnap Screens](app/designs/allscreens.png)
+<div align="center">
+    <!-- PRs Welcome -->
+    <a href="">
+        <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"/>
+    </a>
+    <!-- Say Thanks! -->
+    <a href="https://saythanks.io/to/wajahatkarim3">
+        <img src="https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg"/>
+    </a>
+</div>
 
-An Android app that solves the "missing photographer" problem by intelligently merging a group photo with a separate photo of the person who took it, making it appear as if everyone was in the same shot.
-
-
+<div align="center">
+  <sub>Built with ❤︎ by
+  <a href="https://wajahatkarim.com">Wajahat Karim</a> and
+  <a href="https://github.com/wajahatkarim3/GroupPhotoAndroid/graphs/contributors">
+    contributors
+  </a>
+</div>
+<br/>
+<br/>
 
 ## Demo Videos
 
-<table>
-  <tr>
-    <td align="center">
-      <video src="app/designs/demo1.mp4" width="300" controls>Demo 1</video>
-      <br><b>Demo 1</b>
-    </td>
-    <td align="center">
-      <video src="app/designs/demo2.mp4" width="300" controls>Demo 2</video>
-      <br><b>Demo 2</b>
-    </td>
-  </tr>
-</table>
+##### Demo 1
+
+https://github.com/user-attachments/assets/e204fa7e-8504-4079-8533-4bc5c6859d72
+
+##### Demo 2
+
+https://github.com/user-attachments/assets/fc12f657-9987-41b0-84a9-47471aed85fd
 
 ## Features
 
