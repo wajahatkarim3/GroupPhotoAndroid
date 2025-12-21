@@ -1,6 +1,8 @@
 package com.wajahatkarim.groupphotos.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,6 +12,7 @@ import com.wajahatkarim.groupphotos.ui.screens.HomeScreen
 import com.wajahatkarim.groupphotos.ui.screens.PhotographerUploadScreen
 import com.wajahatkarim.groupphotos.ui.screens.ProcessingScreen
 import com.wajahatkarim.groupphotos.ui.screens.ResultScreen
+import com.wajahatkarim.groupphotos.ui.viewmodel.PhotoViewModel
 
 object Routes {
     const val HOME = "home"
@@ -23,6 +26,9 @@ object Routes {
 fun AppNavigation(
     navController: NavHostController = rememberNavController()
 ) {
+    // Shared ViewModel for photo state
+    val photoViewModel: PhotoViewModel = viewModel()
+
     NavHost(
         navController = navController,
         startDestination = Routes.HOME
@@ -30,6 +36,7 @@ fun AppNavigation(
         composable(Routes.HOME) {
             HomeScreen(
                 onNewGroupPhotoClick = {
+                    photoViewModel.clearAll()
                     navController.navigate(Routes.GROUP_PHOTO_UPLOAD)
                 },
                 onViewPastCreationsClick = {
@@ -43,22 +50,17 @@ fun AppNavigation(
 
         composable(Routes.GROUP_PHOTO_UPLOAD) {
             GroupPhotoUploadScreen(
+                selectedPhotoUri = photoViewModel.groupPhotoUri,
+                onPhotoSelected = { uri ->
+                    photoViewModel.setGroupPhoto(uri)
+                },
                 onBackClick = {
                     navController.popBackStack()
                 },
                 onCloseClick = {
                     navController.popBackStack(Routes.HOME, inclusive = false)
                 },
-                onUploadAreaClick = {
-                    // TODO: Open image picker
-                    navController.navigate(Routes.PHOTOGRAPHER_UPLOAD)
-                },
-                onOpenCameraClick = {
-                    // TODO: Open camera
-                    navController.navigate(Routes.PHOTOGRAPHER_UPLOAD)
-                },
-                onSelectFromGalleryClick = {
-                    // TODO: Open gallery
+                onContinueClick = {
                     navController.navigate(Routes.PHOTOGRAPHER_UPLOAD)
                 }
             )
@@ -66,23 +68,18 @@ fun AppNavigation(
 
         composable(Routes.PHOTOGRAPHER_UPLOAD) {
             PhotographerUploadScreen(
+                selectedPhotoUri = photoViewModel.photographerPhotoUri,
+                onPhotoSelected = { uri ->
+                    photoViewModel.setPhotographerPhoto(uri)
+                },
                 onBackClick = {
                     navController.popBackStack()
                 },
                 onCloseClick = {
                     navController.popBackStack(Routes.HOME, inclusive = false)
                 },
-                onUploadAreaClick = {
-                    // TODO: Open image picker
-                },
                 onGenerateClick = {
                     navController.navigate(Routes.PROCESSING)
-                },
-                onCameraClick = {
-                    // TODO: Open camera
-                },
-                onGalleryClick = {
-                    // TODO: Open gallery
                 }
             )
         }

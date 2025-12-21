@@ -1,7 +1,12 @@
 package com.wajahatkarim.groupphotos.ui.screens
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,21 +40,31 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
+import coil.compose.rememberAsyncImagePainter
 import com.wajahatkarim.groupphotos.ui.theme.BackgroundCard
 import com.wajahatkarim.groupphotos.ui.theme.BackgroundLight
-import com.wajahatkarim.groupphotos.ui.theme.BlueAccent
 import com.wajahatkarim.groupphotos.ui.theme.BorderDashed
 import com.wajahatkarim.groupphotos.ui.theme.CoralOrange
 import com.wajahatkarim.groupphotos.ui.theme.CoralOrangeLight
@@ -58,19 +73,62 @@ import com.wajahatkarim.groupphotos.ui.theme.GroupPhotosTheme
 import com.wajahatkarim.groupphotos.ui.theme.TextPrimary
 import com.wajahatkarim.groupphotos.ui.theme.TextSecondary
 import com.wajahatkarim.groupphotos.ui.theme.TextTertiary
-import androidx.compose.foundation.Canvas
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
+import java.io.File
 
 @Composable
 fun GroupPhotoUploadScreen(
+    selectedPhotoUri: Uri? = null,
+    onPhotoSelected: (Uri) -> Unit = {},
     onBackClick: () -> Unit = {},
     onCloseClick: () -> Unit = {},
-    onUploadAreaClick: () -> Unit = {},
-    onOpenCameraClick: () -> Unit = {},
-    onSelectFromGalleryClick: () -> Unit = {}
+    onContinueClick: () -> Unit = {}
 ) {
+    val context = LocalContext.current
+
+    // Temporary URI for camera capture
+    var tempCameraUri by remember { mutableStateOf<Uri?>(null) }
+
+    // Camera launcher
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { success ->
+        if (success && tempCameraUri != null) {
+            onPhotoSelected(tempCameraUri!!)
+        }
+    }
+
+    // Gallery launcher
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        uri?.let { onPhotoSelected(it) }
+    }
+
+    fun createTempImageUri(): Uri {
+        val tempFile = File.createTempFile(
+            "group_photo_",
+            ".jpg",
+            context.cacheDir
+        )
+        return FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.fileprovider",
+            tempFile
+        )
+    }
+
+    fun openCamera() {
+        val uri = createTempImageUri()
+        tempCameraUri = uri
+        cameraLauncher.launch(uri)
+    }
+
+    fun openGallery() {
+        galleryLauncher.launch(
+            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+        )
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -114,7 +172,6 @@ fun GroupPhotoUploadScreen(
                 .padding(horizontal = 24.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Step 1 - Active
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -122,7 +179,6 @@ fun GroupPhotoUploadScreen(
                     .clip(RoundedCornerShape(2.dp))
                     .background(CoralOrange)
             )
-            // Step 2 - Inactive
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -164,66 +220,77 @@ fun GroupPhotoUploadScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Upload Area with Dashed Border
+            // Upload Area with Dashed Border or Selected Image
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(280.dp)
                     .clip(RoundedCornerShape(20.dp))
                     .background(BackgroundCard)
-                    .clickable { onUploadAreaClick() },
+                    .clickable { openGallery() },
                 contentAlignment = Alignment.Center
             ) {
-                // Dashed border
-                Canvas(modifier = Modifier.fillMaxSize()) {
-                    val stroke = Stroke(
-                        width = 2.dp.toPx(),
-                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
-                    )
-                    drawRoundRect(
-                        color = BorderDashed,
-                        topLeft = Offset(4f, 4f),
-                        size = Size(size.width - 8f, size.height - 8f),
-                        cornerRadius = CornerRadius(20.dp.toPx()),
-                        style = stroke
-                    )
-                }
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    // Camera icon in orange circle
-                    Box(
+                if (selectedPhotoUri != null) {
+                    // Show selected image
+                    Image(
+                        painter = rememberAsyncImagePainter(selectedPhotoUri),
+                        contentDescription = "Selected group photo",
                         modifier = Modifier
-                            .size(64.dp)
-                            .clip(CircleShape)
-                            .background(CoralOrangeLight),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.AddAPhoto,
-                            contentDescription = null,
-                            tint = CoralOrange,
-                            modifier = Modifier.size(32.dp)
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(20.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    // Dashed border
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+                        val stroke = Stroke(
+                            width = 2.dp.toPx(),
+                            pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                        )
+                        drawRoundRect(
+                            color = BorderDashed,
+                            topLeft = Offset(4f, 4f),
+                            size = Size(size.width - 8f, size.height - 8f),
+                            cornerRadius = CornerRadius(20.dp.toPx()),
+                            style = stroke
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(64.dp)
+                                .clip(CircleShape)
+                                .background(CoralOrangeLight),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.AddAPhoto,
+                                contentDescription = null,
+                                tint = CoralOrange,
+                                modifier = Modifier.size(32.dp)
+                            )
+                        }
 
-                    Text(
-                        text = "Tap to upload",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = TextPrimary
-                    )
+                        Spacer(modifier = Modifier.height(16.dp))
 
-                    Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Tap to upload",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = TextPrimary
+                        )
 
-                    Text(
-                        text = "Supports JPG, HEIC, PNG",
-                        fontSize = 14.sp,
-                        color = TextTertiary
-                    )
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        Text(
+                            text = "Supports JPG, HEIC, PNG",
+                            fontSize = 14.sp,
+                            color = TextTertiary
+                        )
+                    }
                 }
             }
 
@@ -275,7 +342,7 @@ fun GroupPhotoUploadScreen(
 
             // Open Camera Button
             Button(
-                onClick = onOpenCameraClick,
+                onClick = { openCamera() },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
@@ -299,30 +366,49 @@ fun GroupPhotoUploadScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Select from Gallery Button
-            OutlinedButton(
-                onClick = onSelectFromGalleryClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(28.dp),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = TextPrimary
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Image,
-                    contentDescription = null,
-                    tint = CoralOrange,
-                    modifier = Modifier.size(22.dp)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = "Select from Gallery",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = TextPrimary
-                )
+            // Select from Gallery Button or Continue Button
+            if (selectedPhotoUri != null) {
+                Button(
+                    onClick = onContinueClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(28.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = GreenAccent
+                    )
+                ) {
+                    Text(
+                        text = "Continue",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            } else {
+                OutlinedButton(
+                    onClick = { openGallery() },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(28.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = TextPrimary
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Image,
+                        contentDescription = null,
+                        tint = CoralOrange,
+                        modifier = Modifier.size(22.dp)
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = "Select from Gallery",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = TextPrimary
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(32.dp))
