@@ -1,0 +1,112 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="400dp"
+    android:height="300dp"
+    android:viewportWidth="400"
+    android:viewportHeight="300">
+
+    <!-- Background - outdoor scene -->
+    <path
+        android:pathData="M0,0h400v300h-400z"
+        android:fillColor="#8BC34A"/>
+
+    <!-- Sky -->
+    <path
+        android:pathData="M0,0h400v150h-400z"
+        android:fillColor="#87CEEB"/>
+
+    <!-- Trees in background -->
+    <path
+        android:pathData="M0,100 Q50,60 100,100 Q150,60 200,100 Q250,60 300,100 Q350,60 400,100 L400,180 L0,180 Z"
+        android:fillColor="#4CAF50"/>
+
+    <!-- Ground -->
+    <path
+        android:pathData="M0,180h400v120h-400z"
+        android:fillColor="#8BC34A"/>
+
+    <!-- Person 1 - jeans -->
+    <path
+        android:pathData="M60,200 L55,280 L75,280 L75,200 Z"
+        android:fillColor="#1565C0"/>
+    <path
+        android:pathData="M75,200 L80,280 L100,280 L95,200 Z"
+        android:fillColor="#1565C0"/>
+    <!-- Person 1 - shirt -->
+    <path
+        android:pathData="M50,150 Q77,140 105,150 L95,205 L60,205 Z"
+        android:fillColor="#1565C0"/>
+    <!-- Person 1 - head -->
+    <path
+        android:pathData="M77,110 A20,20 0 1,1 77,150 A20,20 0 1,1 77,110 Z"
+        android:fillColor="#D4A574"/>
+    <!-- Person 1 - hair -->
+    <path
+        android:pathData="M60,125 Q77,100 94,125 Q92,115 77,112 Q62,115 60,125"
+        android:fillColor="#4A3728"/>
+
+    <!-- Person 2 - jeans -->
+    <path
+        android:pathData="M130,205 L125,280 L145,280 L145,205 Z"
+        android:fillColor="#1565C0"/>
+    <path
+        android:pathData="M145,205 L150,280 L170,280 L165,205 Z"
+        android:fillColor="#1565C0"/>
+    <!-- Person 2 - blouse -->
+    <path
+        android:pathData="M120,155 Q147,145 175,155 L165,210 L130,210 Z"
+        android:fillColor="#FFF8E1"/>
+    <!-- Person 2 - head -->
+    <path
+        android:pathData="M147,115 A20,20 0 1,1 147,155 A20,20 0 1,1 147,115 Z"
+        android:fillColor="#8D6E63"/>
+    <!-- Person 2 - curly hair -->
+    <path
+        android:pathData="M127,125 Q147,90 167,125 Q170,140 147,145 Q124,140 127,125"
+        android:fillColor="#3E2723"/>
+
+    <!-- Person 3 - jeans -->
+    <path
+        android:pathData="M200,200 L195,280 L215,280 L215,200 Z"
+        android:fillColor="#1565C0"/>
+    <path
+        android:pathData="M215,200 L220,280 L240,280 L235,200 Z"
+        android:fillColor="#1565C0"/>
+    <!-- Person 3 - shirt -->
+    <path
+        android:pathData="M190,150 Q217,140 245,150 L235,205 L200,205 Z"
+        android:fillColor="#90A4AE"/>
+    <!-- Person 3 - head -->
+    <path
+        android:pathData="M217,110 A20,20 0 1,1 217,150 A20,20 0 1,1 217,110 Z"
+        android:fillColor="#D4A574"/>
+    <!-- Person 3 - hair -->
+    <path
+        android:pathData="M200,125 Q217,105 234,125 Q232,118 217,115 Q202,118 200,125"
+        android:fillColor="#5D4037"/>
+
+    <!-- Person 4 - jeans -->
+    <path
+        android:pathData="M270,200 L265,280 L285,280 L285,200 Z"
+        android:fillColor="#1565C0"/>
+    <path
+        android:pathData="M285,200 L290,280 L310,280 L305,200 Z"
+        android:fillColor="#1565C0"/>
+    <!-- Person 4 - plaid shirt -->
+    <path
+        android:pathData="M260,150 Q287,140 315,150 L305,205 L270,205 Z"
+        android:fillColor="#5C6BC0"/>
+    <!-- Person 4 - head -->
+    <path
+        android:pathData="M287,110 A20,20 0 1,1 287,150 A20,20 0 1,1 287,110 Z"
+        android:fillColor="#D4A574"/>
+    <!-- Person 4 - hair -->
+    <path
+        android:pathData="M270,125 Q287,100 304,125 Q302,118 287,115 Q272,118 270,125"
+        android:fillColor="#795548"/>
+
+    <!-- Camera in person 4's hands -->
+    <path
+        android:pathData="M275,180 L300,180 L300,195 L275,195 Z"
+        android:fillColor="#424242"/>
+
+</vector>

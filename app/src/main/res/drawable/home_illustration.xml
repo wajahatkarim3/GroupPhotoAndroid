@@ -1,0 +1,151 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="300dp"
+    android:height="220dp"
+    android:viewportWidth="300"
+    android:viewportHeight="220">
+
+    <!-- Background -->
+    <path
+        android:pathData="M0,0h300v220h-300z"
+        android:fillColor="#FFF5EE"/>
+
+    <!-- Ground/Floor -->
+    <path
+        android:pathData="M0,180 Q150,200 300,180 L300,220 L0,220 Z"
+        android:fillColor="#E8DDD4"/>
+
+    <!-- Person 1 (left) - pants -->
+    <path
+        android:pathData="M45,140 L40,180 L55,180 L55,140 Z"
+        android:fillColor="#5B8A8A"/>
+    <path
+        android:pathData="M55,140 L60,180 L75,180 L70,140 Z"
+        android:fillColor="#5B8A8A"/>
+    <!-- Person 1 - torso -->
+    <path
+        android:pathData="M40,100 Q57,95 75,100 L70,145 L45,145 Z"
+        android:fillColor="#6B4423"/>
+    <!-- Person 1 - head (circle as path: cx=57, cy=85, r=18) -->
+    <path
+        android:pathData="M57,67 A18,18 0 1,1 57,103 A18,18 0 1,1 57,67 Z"
+        android:fillColor="#D4A574"/>
+    <!-- Person 1 - hair -->
+    <path
+        android:pathData="M42,80 Q57,60 72,80 Q72,75 57,70 Q42,75 42,80"
+        android:fillColor="#4A3728"/>
+
+    <!-- Person 2 - pants -->
+    <path
+        android:pathData="M85,145 L82,180 L95,180 L95,145 Z"
+        android:fillColor="#2C3E50"/>
+    <path
+        android:pathData="M95,145 L98,180 L112,180 L108,145 Z"
+        android:fillColor="#2C3E50"/>
+    <!-- Person 2 - torso (yellow) -->
+    <path
+        android:pathData="M80,105 Q97,100 115,105 L108,150 L85,150 Z"
+        android:fillColor="#F4C430"/>
+    <!-- Person 2 - head (circle as path: cx=97, cy=88, r=18) -->
+    <path
+        android:pathData="M97,70 A18,18 0 1,1 97,106 A18,18 0 1,1 97,70 Z"
+        android:fillColor="#8B6914"/>
+    <!-- Person 2 - hair -->
+    <path
+        android:pathData="M82,82 Q97,65 112,82 L112,95 Q97,85 82,95 Z"
+        android:fillColor="#1A1A1A"/>
+
+    <!-- Person 3 (center) - pants -->
+    <path
+        android:pathData="M125,145 L122,180 L135,180 L135,145 Z"
+        android:fillColor="#2C3E50"/>
+    <path
+        android:pathData="M135,145 L138,180 L152,180 L148,145 Z"
+        android:fillColor="#2C3E50"/>
+    <!-- Person 3 - torso (pink/salmon) -->
+    <path
+        android:pathData="M120,105 Q137,100 155,105 L148,150 L125,150 Z"
+        android:fillColor="#E8B4B8"/>
+    <!-- Person 3 - head (circle as path: cx=137, cy=88, r=18) -->
+    <path
+        android:pathData="M137,70 A18,18 0 1,1 137,106 A18,18 0 1,1 137,70 Z"
+        android:fillColor="#6B4423"/>
+    <!-- Person 3 - hair -->
+    <path
+        android:pathData="M122,82 Q137,60 152,82 Q150,90 137,88 Q124,90 122,82"
+        android:fillColor="#1A1A1A"/>
+
+    <!-- Person 4 - pants -->
+    <path
+        android:pathData="M165,142 L162,180 L175,180 L175,142 Z"
+        android:fillColor="#87CEEB"/>
+    <path
+        android:pathData="M175,142 L178,180 L192,180 L188,142 Z"
+        android:fillColor="#87CEEB"/>
+    <!-- Person 4 - torso (light blue) -->
+    <path
+        android:pathData="M160,102 Q177,97 195,102 L188,147 L165,147 Z"
+        android:fillColor="#87CEEB"/>
+    <!-- Person 4 - head (circle as path: cx=177, cy=85, r=18) -->
+    <path
+        android:pathData="M177,67 A18,18 0 1,1 177,103 A18,18 0 1,1 177,67 Z"
+        android:fillColor="#D4A574"/>
+    <!-- Person 4 - hair -->
+    <path
+        android:pathData="M162,78 Q177,60 192,78 Q190,90 177,95 Q164,90 162,78"
+        android:fillColor="#6B4423"/>
+
+    <!-- Person 5 - pants -->
+    <path
+        android:pathData="M205,140 L202,180 L215,180 L215,140 Z"
+        android:fillColor="#5B8A8A"/>
+    <path
+        android:pathData="M215,140 L218,180 L232,180 L228,140 Z"
+        android:fillColor="#5B8A8A"/>
+    <!-- Person 5 - torso (orange) -->
+    <path
+        android:pathData="M200,100 Q217,95 235,100 L228,145 L205,145 Z"
+        android:fillColor="#F27935"/>
+    <!-- Person 5 - head (circle as path: cx=217, cy=83, r=18) -->
+    <path
+        android:pathData="M217,65 A18,18 0 1,1 217,101 A18,18 0 1,1 217,65 Z"
+        android:fillColor="#D4A574"/>
+    <!-- Person 5 - hair -->
+    <path
+        android:pathData="M202,76 Q217,58 232,76 Q230,85 217,80 Q204,85 202,76"
+        android:fillColor="#4A3728"/>
+
+    <!-- Camera on tripod -->
+    <!-- Tripod legs -->
+    <path
+        android:pathData="M252,130 L240,180"
+        android:strokeColor="#1A1A1A"
+        android:strokeWidth="3"/>
+    <path
+        android:pathData="M252,130 L265,180"
+        android:strokeColor="#1A1A1A"
+        android:strokeWidth="3"/>
+    <path
+        android:pathData="M252,130 L252,180"
+        android:strokeColor="#1A1A1A"
+        android:strokeWidth="3"/>
+    <!-- Camera body -->
+    <path
+        android:pathData="M238,105 L266,105 L266,130 L238,130 Z"
+        android:fillColor="#4A4A4A"/>
+    <!-- Camera lens (circle as path: cx=252, cy=117, r=8) -->
+    <path
+        android:pathData="M252,109 A8,8 0 1,1 252,125 A8,8 0 1,1 252,109 Z"
+        android:fillColor="#1A1A1A"/>
+    <!-- Camera lens inner (circle as path: cx=252, cy=117, r=5) -->
+    <path
+        android:pathData="M252,112 A5,5 0 1,1 252,122 A5,5 0 1,1 252,112 Z"
+        android:fillColor="#2A2A2A"/>
+
+    <!-- Dotted arc for missing person -->
+    <path
+        android:pathData="M265,60 Q290,30 280,100"
+        android:strokeColor="#1A1A1A"
+        android:strokeWidth="2"
+        android:fillColor="#00000000"/>
+
+</vector>
