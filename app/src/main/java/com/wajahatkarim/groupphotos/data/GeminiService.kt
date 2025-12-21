@@ -6,34 +6,32 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Base64
 import android.util.Log
-import com.google.ai.client.generativeai.GenerativeModel
-import com.google.ai.client.generativeai.type.GenerateContentResponse
-import com.google.ai.client.generativeai.type.content
-import com.google.ai.client.generativeai.type.generationConfig
 import com.wajahatkarim.groupphotos.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.ByteArrayOutputStream
+import java.util.concurrent.TimeUnit
 
 class GeminiService {
 
     companion object {
         private const val TAG = "GeminiService"
+        // Nano Banana Pro - Image generation and editing model
+        private const val MODEL_NAME = "gemini-3-pro-image-preview"
+        private const val API_URL = "https://generativelanguage.googleapis.com/v1beta/models/$MODEL_NAME:generateContent"
     }
 
-    // Nano Banana Pro - Image generation and editing model
-    private val imageGenerationModel by lazy {
-        GenerativeModel(
-            modelName = "gemini-2.0-flash-exp-image-generation",
-            apiKey = BuildConfig.GEMINI_API_KEY,
-            generationConfig = generationConfig {
-                temperature = 1f
-                topK = 40
-                topP = 0.95f
-                maxOutputTokens = 8192
-            }
-        )
-    }
+    private val client = OkHttpClient.Builder()
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .readTimeout(120, TimeUnit.SECONDS)
+        .writeTimeout(60, TimeUnit.SECONDS)
+        .build()
 
     /**
      * Merges the photographer into the group photo using Gemini Image Generation
@@ -59,6 +57,10 @@ class GeminiService {
                 Log.d(TAG, "Group photo size: ${resizedGroupBitmap.width}x${resizedGroupBitmap.height}")
                 Log.d(TAG, "Photographer photo size: ${resizedPhotographerBitmap.width}x${resizedPhotographerBitmap.height}")
 
+                // Convert bitmaps to base64
+                val groupBase64 = bitmapToBase64(resizedGroupBitmap)
+                val photographerBase64 = bitmapToBase64(resizedPhotographerBitmap)
+
                 val prompt = """
                     You are an expert photo editor. I have two photos:
                     1. A group photo with people in it
@@ -78,21 +80,30 @@ class GeminiService {
                     Generate the merged photo.
                 """.trimIndent()
 
-                Log.d(TAG, "Sending request to Gemini...")
+                // Build the request body (matching your web backend structure)
+                val requestBody = buildRequestBody(groupBase64, photographerBase64, prompt)
 
-                val response = imageGenerationModel.generateContent(
-                    content {
-                        image(resizedGroupBitmap)
-                        image(resizedPhotographerBitmap)
-                        text(prompt)
-                    }
-                )
+                Log.d(TAG, "Sending request to Gemini API...")
 
-                Log.d(TAG, "Response received, extracting image...")
+                val request = Request.Builder()
+                    .url("$API_URL?key=${BuildConfig.GEMINI_API_KEY}")
+                    .addHeader("Content-Type", "application/json")
+                    .post(requestBody.toString().toRequestBody("application/json".toMediaType()))
+                    .build()
 
-                // Extract the generated image from response
-                val generatedBitmap = extractImageFromResponse(response)
-                    ?: return@withContext Result.failure(Exception("No image generated in response. Response text: ${response.text}"))
+                val response = client.newCall(request).execute()
+                val responseBody = response.body?.string()
+
+                Log.d(TAG, "Response code: ${response.code}")
+
+                if (!response.isSuccessful) {
+                    Log.e(TAG, "API Error: $responseBody")
+                    return@withContext Result.failure(Exception("API Error: ${response.code} - $responseBody"))
+                }
+
+                // Parse the response and extract the image
+                val generatedBitmap = extractImageFromResponse(responseBody)
+                    ?: return@withContext Result.failure(Exception("No image in response. Response: $responseBody"))
 
                 Log.d(TAG, "Image extracted successfully: ${generatedBitmap.width}x${generatedBitmap.height}")
 
@@ -105,57 +116,99 @@ class GeminiService {
     }
 
     /**
-     * Extract image bitmap from Gemini response
+     * Build the JSON request body for Gemini API
      */
-    private fun extractImageFromResponse(response: GenerateContentResponse): Bitmap? {
+    private fun buildRequestBody(groupBase64: String, photographerBase64: String, prompt: String): JSONObject {
+        val parts = JSONArray().apply {
+            // Group photo
+            put(JSONObject().apply {
+                put("inlineData", JSONObject().apply {
+                    put("mimeType", "image/jpeg")
+                    put("data", groupBase64)
+                })
+            })
+            // Text indicating first image
+            put(JSONObject().apply {
+                put("text", "This is the group photo.")
+            })
+            // Photographer photo
+            put(JSONObject().apply {
+                put("inlineData", JSONObject().apply {
+                    put("mimeType", "image/jpeg")
+                    put("data", photographerBase64)
+                })
+            })
+            // Prompt
+            put(JSONObject().apply {
+                put("text", prompt)
+            })
+        }
+
+        val contents = JSONArray().apply {
+            put(JSONObject().apply {
+                put("parts", parts)
+            })
+        }
+
+        val generationConfig = JSONObject().apply {
+            put("temperature", 1)
+            put("topK", 40)
+            put("topP", 0.95)
+            put("maxOutputTokens", 8192)
+            // Request image output
+            put("responseModalities", JSONArray().apply {
+                put("TEXT")
+                put("IMAGE")
+            })
+        }
+
+        return JSONObject().apply {
+            put("contents", contents)
+            put("generationConfig", generationConfig)
+        }
+    }
+
+    /**
+     * Extract image bitmap from Gemini API response
+     */
+    private fun extractImageFromResponse(responseBody: String?): Bitmap? {
+        if (responseBody == null) return null
+
         try {
-            response.candidates.forEach { candidate ->
-                candidate.content.parts.forEach { part ->
-                    Log.d(TAG, "Part type: ${part::class.simpleName}")
+            val json = JSONObject(responseBody)
+            val candidates = json.optJSONArray("candidates") ?: return null
 
-                    // Try to get inline data using reflection or direct access
-                    // The SDK may return image data in different formats
+            for (i in 0 until candidates.length()) {
+                val candidate = candidates.getJSONObject(i)
+                val content = candidate.optJSONObject("content") ?: continue
+                val parts = content.optJSONArray("parts") ?: continue
 
-                    // Check if part has inlineData property
-                    try {
-                        val partClass = part::class.java
+                for (j in 0 until parts.length()) {
+                    val part = parts.getJSONObject(j)
 
-                        // Try to find inlineData or similar field
-                        partClass.methods.forEach { method ->
-                            Log.d(TAG, "Available method: ${method.name}")
+                    // Check for inlineData (camelCase)
+                    var inlineData = part.optJSONObject("inlineData")
+                    // Check for inline_data (snake_case)
+                    if (inlineData == null) {
+                        inlineData = part.optJSONObject("inline_data")
+                    }
+
+                    if (inlineData != null) {
+                        val data = inlineData.optString("data", "")
+                        val mimeType = inlineData.optString("mimeType", inlineData.optString("mime_type", ""))
+
+                        if (data.isNotEmpty() && mimeType.startsWith("image/")) {
+                            Log.d(TAG, "Found image data with mimeType: $mimeType")
+                            val imageBytes = Base64.decode(data, Base64.DEFAULT)
+                            return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                         }
-
-                        // Try getInlineData method
-                        val getInlineData = partClass.methods.find {
-                            it.name == "getInlineData" || it.name == "getImage"
-                        }
-
-                        if (getInlineData != null) {
-                            val inlineData = getInlineData.invoke(part)
-                            Log.d(TAG, "InlineData: $inlineData")
-
-                            if (inlineData != null) {
-                                // Try to extract data and mimeType
-                                val inlineDataClass = inlineData::class.java
-                                val getData = inlineDataClass.methods.find { it.name == "getData" }
-                                val data = getData?.invoke(inlineData)
-
-                                if (data is ByteArray) {
-                                    return BitmapFactory.decodeByteArray(data, 0, data.size)
-                                }
-                            }
-                        }
-                    } catch (e: Exception) {
-                        Log.e(TAG, "Reflection error: ${e.message}")
                     }
                 }
             }
 
-            // If we couldn't extract image, log the response for debugging
-            Log.d(TAG, "Response text: ${response.text}")
-
+            Log.d(TAG, "No image found in response")
         } catch (e: Exception) {
-            Log.e(TAG, "Error extracting image from response", e)
+            Log.e(TAG, "Error parsing response", e)
         }
         return null
     }
@@ -199,7 +252,7 @@ class GeminiService {
      */
     private fun bitmapToBase64(bitmap: Bitmap): String {
         val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, byteArrayOutputStream)
         val byteArray = byteArrayOutputStream.toByteArray()
         return Base64.encodeToString(byteArray, Base64.NO_WRAP)
     }

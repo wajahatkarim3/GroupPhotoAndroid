@@ -1,7 +1,6 @@
 package com.wajahatkarim.groupphotos.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -86,33 +85,33 @@ fun AppNavigation(
 
         composable(Routes.PROCESSING) {
             ProcessingScreen(
+                viewModel = photoViewModel,
                 onCancelClick = {
+                    photoViewModel.resetProcessingState()
                     navController.popBackStack(Routes.HOME, inclusive = false)
                 },
                 onProcessingComplete = {
                     navController.navigate(Routes.RESULT) {
-                        popUpTo(Routes.HOME)
+                        popUpTo(Routes.PROCESSING) { inclusive = true }
                     }
+                },
+                onRetryClick = {
+                    // Go back to photographer upload to retry
+                    navController.popBackStack()
                 }
             )
         }
 
         composable(Routes.RESULT) {
             ResultScreen(
+                viewModel = photoViewModel,
                 onCloseClick = {
+                    photoViewModel.clearAll()
                     navController.popBackStack(Routes.HOME, inclusive = false)
                 },
                 onDoneClick = {
+                    photoViewModel.clearAll()
                     navController.popBackStack(Routes.HOME, inclusive = false)
-                },
-                onShareClick = {
-                    // TODO: Share functionality
-                },
-                onSavePhotoClick = {
-                    // TODO: Save to gallery
-                },
-                onSideBySideClick = {
-                    // TODO: Show side by side comparison
                 }
             )
         }
