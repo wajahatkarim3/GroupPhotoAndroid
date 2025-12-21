@@ -13,12 +13,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -131,12 +134,13 @@ fun PhotographerUploadScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(BackgroundLight)
+            .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         // Top Bar
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 16.dp),
+                .padding(horizontal = 8.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -370,60 +374,60 @@ fun PhotographerUploadScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Camera and Gallery Buttons Row
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                OutlinedButton(
-                    onClick = { openCamera() },
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(56.dp),
-                    shape = RoundedCornerShape(28.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = TextPrimary
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.PhotoCamera,
-                        contentDescription = null,
-                        tint = TextPrimary,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "Camera",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = TextPrimary
-                    )
-                }
-                OutlinedButton(
-                    onClick = { openGallery() },
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(56.dp),
-                    shape = RoundedCornerShape(28.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = TextPrimary
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Image,
-                        contentDescription = null,
-                        tint = TextPrimary,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "Gallery",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = TextPrimary
-                    )
-                }
-            }
+//            // Camera and Gallery Buttons Row
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//                horizontalArrangement = Arrangement.spacedBy(12.dp)
+//            ) {
+//                OutlinedButton(
+//                    onClick = { openCamera() },
+//                    modifier = Modifier
+//                        .weight(1f)
+//                        .height(56.dp),
+//                    shape = RoundedCornerShape(28.dp),
+//                    colors = ButtonDefaults.outlinedButtonColors(
+//                        contentColor = TextPrimary
+//                    )
+//                ) {
+//                    Icon(
+//                        imageVector = Icons.Outlined.PhotoCamera,
+//                        contentDescription = null,
+//                        tint = TextPrimary,
+//                        modifier = Modifier.size(20.dp)
+//                    )
+//                    Spacer(modifier = Modifier.width(8.dp))
+//                    Text(
+//                        text = "Camera",
+//                        fontSize = 16.sp,
+//                        fontWeight = FontWeight.SemiBold,
+//                        color = TextPrimary
+//                    )
+//                }
+//                OutlinedButton(
+//                    onClick = { openGallery() },
+//                    modifier = Modifier
+//                        .weight(1f)
+//                        .height(56.dp),
+//                    shape = RoundedCornerShape(28.dp),
+//                    colors = ButtonDefaults.outlinedButtonColors(
+//                        contentColor = TextPrimary
+//                    )
+//                ) {
+//                    Icon(
+//                        imageVector = Icons.Outlined.Image,
+//                        contentDescription = null,
+//                        tint = TextPrimary,
+//                        modifier = Modifier.size(20.dp)
+//                    )
+//                    Spacer(modifier = Modifier.width(8.dp))
+//                    Text(
+//                        text = "Gallery",
+//                        fontSize = 16.sp,
+//                        fontWeight = FontWeight.SemiBold,
+//                        color = TextPrimary
+//                    )
+//                }
+//            }
 
             Spacer(modifier = Modifier.height(32.dp))
         }

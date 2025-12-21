@@ -13,12 +13,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -133,12 +136,13 @@ fun GroupPhotoUploadScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(BackgroundLight)
+            .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         // Top Bar
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 16.dp),
+                .padding(horizontal = 8.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -340,32 +344,32 @@ fun GroupPhotoUploadScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Open Camera Button
-            Button(
-                onClick = { openCamera() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(28.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = CoralOrange
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.PhotoCamera,
-                    contentDescription = null,
-                    modifier = Modifier.size(22.dp)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = "Open Camera",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
+//            // Open Camera Button
+//            Button(
+//                onClick = { openCamera() },
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(56.dp),
+//                shape = RoundedCornerShape(28.dp),
+//                colors = ButtonDefaults.buttonColors(
+//                    containerColor = CoralOrange
+//                )
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Outlined.PhotoCamera,
+//                    contentDescription = null,
+//                    modifier = Modifier.size(22.dp)
+//                )
+//                Spacer(modifier = Modifier.width(12.dp))
+//                Text(
+//                    text = "Open Camera",
+//                    fontSize = 18.sp,
+//                    fontWeight = FontWeight.SemiBold
+//                )
+//            }
+//
+//            Spacer(modifier = Modifier.height(12.dp))
+//
             // Select from Gallery Button or Continue Button
             if (selectedPhotoUri != null) {
                 Button(
@@ -384,32 +388,33 @@ fun GroupPhotoUploadScreen(
                         fontWeight = FontWeight.SemiBold
                     )
                 }
-            } else {
-                OutlinedButton(
-                    onClick = { openGallery() },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(28.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = TextPrimary
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Image,
-                        contentDescription = null,
-                        tint = CoralOrange,
-                        modifier = Modifier.size(22.dp)
-                    )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = "Select from Gallery",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = TextPrimary
-                    )
-                }
             }
+//            else {
+//                OutlinedButton(
+//                    onClick = { openGallery() },
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(56.dp),
+//                    shape = RoundedCornerShape(28.dp),
+//                    colors = ButtonDefaults.outlinedButtonColors(
+//                        contentColor = TextPrimary
+//                    )
+//                ) {
+//                    Icon(
+//                        imageVector = Icons.Outlined.Image,
+//                        contentDescription = null,
+//                        tint = CoralOrange,
+//                        modifier = Modifier.size(22.dp)
+//                    )
+//                    Spacer(modifier = Modifier.width(12.dp))
+//                    Text(
+//                        text = "Select from Gallery",
+//                        fontSize = 18.sp,
+//                        fontWeight = FontWeight.SemiBold,
+//                        color = TextPrimary
+//                    )
+//                }
+//            }
 
             Spacer(modifier = Modifier.height(32.dp))
         }

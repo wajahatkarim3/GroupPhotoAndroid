@@ -8,12 +8,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Image
@@ -58,10 +61,11 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(BackgroundLight)
+            .windowInsetsPadding(WindowInsets.safeDrawing)
             .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(56.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         // Top Bar
         Row(
@@ -107,7 +111,7 @@ fun HomeScreen(
             contentAlignment = Alignment.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.home_illustration),
+                painter = painterResource(id = R.drawable.group_selfie),
                 contentDescription = "Group photo illustration",
                 modifier = Modifier
                     .fillMaxSize()
@@ -166,61 +170,57 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // View Past Creations Button
-        OutlinedButton(
-            onClick = onViewPastCreationsClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(28.dp),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = TextPrimary
-            )
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.Image,
-                contentDescription = null,
-                tint = CoralOrange,
-                modifier = Modifier.size(22.dp)
-            )
-            Spacer(modifier = Modifier.width(12.dp))
-            Text(
-                text = "View Past Creations",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = TextPrimary
-            )
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
+//        // View Past Creations Button
+//        OutlinedButton(
+//            onClick = onViewPastCreationsClick,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(56.dp),
+//            shape = RoundedCornerShape(28.dp),
+//            colors = ButtonDefaults.outlinedButtonColors(
+//                contentColor = TextPrimary
+//            )
+//        ) {
+//            Icon(
+//                imageVector = Icons.Outlined.Image,
+//                contentDescription = null,
+//                tint = CoralOrange,
+//                modifier = Modifier.size(22.dp)
+//            )
+//            Spacer(modifier = Modifier.width(12.dp))
+//            Text(
+//                text = "View Past Creations",
+//                fontSize = 18.sp,
+//                fontWeight = FontWeight.SemiBold,
+//                color = TextPrimary
+//            )
+//        }
+//
+//        Spacer(modifier = Modifier.height(32.dp))
 
         // Footer
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Version 2.0 ",
+                text = "Made with \u2764\uFE0F",
                 fontSize = 14.sp,
                 color = TextTertiary
             )
             Text(
-                text = "•",
+                text = " by ",
                 fontSize = 14.sp,
                 color = TextTertiary
             )
             Text(
-                text = " Made with ",
+                text = "Wajahat Karim",
                 fontSize = 14.sp,
-                color = TextTertiary
-            )
-            Text(
-                text = "\u2764\uFE0F",
-                fontSize = 14.sp,
-                color = RedHeart
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
             )
         }
 
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 

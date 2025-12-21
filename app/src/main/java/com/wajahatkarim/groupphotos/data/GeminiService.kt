@@ -62,22 +62,29 @@ class GeminiService {
                 val photographerBase64 = bitmapToBase64(resizedPhotographerBitmap)
 
                 val prompt = """
-                    You are an expert photo editor. I have two photos:
-                    1. A group photo with people in it
-                    2. A photo of a person (the photographer) who was taking the group photo
+                    TASK: Add one person to an existing group photo.
 
-                    Your task: Seamlessly merge the photographer into the group photo so it looks like
-                    they were always part of the group.
+                    IMAGE 1 (above): The original GROUP PHOTO - this is the BASE image that must be preserved.
+                    IMAGE 2 (above): A SINGLE PERSON (the photographer) who needs to be added to the group.
 
-                    Requirements:
-                    - Find a natural gap or position in the group photo to place the photographer
-                    - Match the lighting, color tone, and perspective
-                    - Make sure the scale of the person matches others in the group
-                    - Remove any background from the photographer's photo
-                    - The result should look completely natural, as if everyone posed together
-                    - Maintain the original quality and style of the group photo
+                    CRITICAL REQUIREMENTS:
+                    1. OUTPUT MUST have the EXACT same framing, composition, and dimensions as the GROUP PHOTO (Image 1)
+                    2. The GROUP PHOTO is the base - do NOT crop it, zoom in, or change its perspective
+                    3. ADD the single person FROM Image 2 INTO the group photo at the SAME SCALE as other people in the group
+                    4. The added person should appear the SAME SIZE as other people in the group photo - NOT larger
+                    5. Place the person in a natural gap or edge position (like standing on the side or in an empty space)
+                    6. Extract ONLY the person from Image 2 (remove their background completely)
+                    7. Match lighting, shadows, and color grading to blend naturally
+                    8. Keep ALL existing people in the group photo - do not remove or replace anyone
+                    9. The final image should look like a natural group photo where everyone posed together
 
-                    Generate the merged photo.
+                    DO NOT:
+                    - Make the added person larger than others in the photo
+                    - Create a collage or split-screen effect
+                    - Change the zoom level or crop of the original group photo
+                    - Put the added person's face in the foreground/closeup
+
+                    Generate the edited group photo with the person seamlessly added.
                 """.trimIndent()
 
                 // Build the request body (matching your web backend structure)
@@ -120,6 +127,10 @@ class GeminiService {
      */
     private fun buildRequestBody(groupBase64: String, photographerBase64: String, prompt: String): JSONObject {
         val parts = JSONArray().apply {
+            // Label for first image
+            put(JSONObject().apply {
+                put("text", "IMAGE 1 - THE GROUP PHOTO (use this as the base, keep exact framing):")
+            })
             // Group photo
             put(JSONObject().apply {
                 put("inlineData", JSONObject().apply {
@@ -127,9 +138,9 @@ class GeminiService {
                     put("data", groupBase64)
                 })
             })
-            // Text indicating first image
+            // Label for second image
             put(JSONObject().apply {
-                put("text", "This is the group photo.")
+                put("text", "IMAGE 2 - SINGLE PERSON TO ADD (extract this person and add them to the group at matching scale):")
             })
             // Photographer photo
             put(JSONObject().apply {
