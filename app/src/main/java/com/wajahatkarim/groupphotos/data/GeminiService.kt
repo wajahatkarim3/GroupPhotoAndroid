@@ -64,12 +64,12 @@ class GeminiService {
                 val prompt = """
                     TASK: Add one person to an existing group photo.
 
-                    IMAGE 1 (above): The original GROUP PHOTO - this is the BASE image that must be preserved.
-                    IMAGE 2 (above): A SINGLE PERSON (the photographer) who needs to be added to the group.
+                    IMAGE 1: The original GROUP PHOTO - this is the BASE image that must be preserved.
+                    IMAGE 2: A SINGLE PERSON (the photographer) who needs to be added to the group.
 
                     CRITICAL REQUIREMENTS:
                     1. OUTPUT MUST have the EXACT same framing, composition, and dimensions as the GROUP PHOTO (Image 1)
-                    2. The GROUP PHOTO is the base - do NOT crop it, zoom in, or change its perspective
+                    2. The GROUP PHOTO is the base - do NOT crop it, zoom in, or change its perspective, or change the poses of the people
                     3. ADD the single person FROM Image 2 INTO the group photo at the SAME SCALE as other people in the group
                     4. The added person should appear the SAME SIZE as other people in the group photo - NOT larger
                     5. Place the person in a natural gap or edge position (like standing on the side or in an empty space)

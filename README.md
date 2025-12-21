@@ -4,6 +4,23 @@
 
 An Android app that solves the "missing photographer" problem by intelligently merging a group photo with a separate photo of the person who took it, making it appear as if everyone was in the same shot.
 
+
+
+## Demo Videos
+
+<table>
+  <tr>
+    <td align="center">
+      <video src="app/designs/demo1.mp4" width="300" controls>Demo 1</video>
+      <br><b>Demo 1</b>
+    </td>
+    <td align="center">
+      <video src="app/designs/demo2.mp4" width="300" controls>Demo 2</video>
+      <br><b>Demo 2</b>
+    </td>
+  </tr>
+</table>
+
 ## Features
 
 - **Smart Photo Merging** - Gemini Nano Banana AI-powered blending of photographer into group photos
