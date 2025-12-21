@@ -30,6 +30,19 @@
 <br/>
 <br/>
 
+## Why?
+
+As part of the Google for Developers AI Sprint H2 2025 hosted by the AI Developers Program Team, I developed GroupSnap.
+
+GroupSnap is an Android app that solves the "missing photographer" problem by intelligently merging a group photo with a separate photo of the person who took it, making it appear as if everyone was in the same shot. The project uses Gemini Nano Banana Pro to merge the photos.
+
+In the demos, you will see me add another single person in the group photo seamlessly as the person was there while taking the photo.
+
+Disclaimer: This project is meant in a playful, experimental spirit showcasing the generative capabilities of Gemini 3 Pro Image and Nano Banana.
+
+https://www.linkedin.com/posts/wajahatkarim_aisprinth2-googledeveloperexperts-googlecloud-activity-7408609015821144065-A2BC
+
+
 ## Demo Videos
 
 ##### Demo 1
@@ -89,6 +102,21 @@ app/src/main/java/com/wajahatkarim/groupphotos/
         ├── Theme.kt
         └── Type.kt
 ```
+
+## 👨 Developed By
+
+<a href="https://twitter.com/WajahatKarim" target="_blank">
+  <img src="https://avatars1.githubusercontent.com/u/8867121?s=460&v=4" width="70" align="left">
+</a>
+
+**Wajahat Karim**
+
+[![Twitter](https://img.shields.io/badge/-twitter-grey?logo=twitter)](https://twitter.com/WajahatKarim)
+[![Web](https://img.shields.io/badge/-web-grey?logo=appveyor)](https://wajahatkarim.com/)
+[![Medium](https://img.shields.io/badge/-medium-grey?logo=medium)](https://medium.com/@wajahatkarim3)
+[![Linkedin](https://img.shields.io/badge/-linkedin-grey?logo=linkedin)](https://www.linkedin.com/in/wajahatkarim/)
+
+<br/>
 
 ## License
 
